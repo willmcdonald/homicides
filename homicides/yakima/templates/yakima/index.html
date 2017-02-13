@@ -1,0 +1,131 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'yakima/main.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'yakima/leaflet.css' %}" />
+
+<script src="{% static 'yakima/leaflet.js' %}"></script>
+<script src="{% static 'yakima/jquery.js' %}"></script>
+
+
+<head>
+
+  <meta name=viewport content="width=device-width, initial-scale=1">
+
+</head>
+
+
+<div class="intro">
+
+  <h1>Yakima County Homicides</h1>
+  <p>There were 21 homicides in Yakima County in 2016 &mdash; almost twice the national rate per capita. These are the people who were killed in Yakima County in 2016 and 2017.</p>
+
+</div>
+
+
+<div class="wrap">
+  <div id="map"></div>
+
+  <form action="" method="get" class="form-inline" style="margin-top: 20px;">
+      <select name="year" class="form-control">
+          <option value="" />Year</option>
+          <option value="2016" />2016</option>
+          <option value="2017" />2017</option>
+      </select>
+      <select name="method" class="form-control">
+          <option value="" />Method</option>
+          <option value="gunshot" />Gunshot</option>
+          <option value="stabbing" />Stabbing</option>
+          <option value="beaten with baseball bat" />Beaten</option>
+      </select>
+      <select name="city" class="form-control">
+          <option value="" />City</option>
+          <option value="Yakima" />Yakima</option>
+          <option value="Union Gap" />Union Gap</option>
+          <option value="Sunnyside" />Sunnyside</option>
+      </select>
+      <select name="status" class="form-control">
+          <option value="" />Status</option>
+          <option value="charges filed" />Charges Filed</option>
+          <option value="no arrest made" />No Arrest Made</option>
+      </select>
+      <input type="submit"  class="btn btn-primary" value="Filter Results"/>
+  </form>
+
+<ul class="cards">
+
+{% for homicide in filter.qs %}
+
+<a id="{{ homicide.id }}" href="{{ homicide.id }}"><li class="cards__item">
+    <div class="card">
+      <img class="card__image"src="{{ homicide.image_url}}">
+      <div class="card__content">
+        <div class="card__title"><a id="{{ homicide.id }}" href="{{ homicide.id }}">{{homicide.name}}</a></div>
+        <p class="card__text">Killed by {{homicide.method }} on {{homicide.date}} in {{homicide.city}}</p>
+      </div>
+    </div>
+  </li></a>
+
+{% endfor %}
+</ul>
+
+</div>
+
+<script type="text/javascript">
+          var map = L.map('map').setView([46.5941575,-120.61813], 9);
+          var osmLayer = new L.TileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+              maxZoom: 18,
+              attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		          id: 'mapbox.streets',
+          });
+          map.addLayer(osmLayer);
+          var markers = [];
+          var data = {
+            "type": "FeatureCollection",
+            "features": [
+              {% for homicide in filter.qs %}
+              {
+                "type": "Feature",
+                "properties": {
+                  "name": "{{ homicide.name }}",
+                  "id": "{{ homicide.id }}"
+                },
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [{{ homicide.y }}, {{ homicide.x }}]
+                }
+              }{% if not loop.last %},{% endif %}
+              {% endfor %}
+            ]
+          };
+          var blackIcon = L.Icon.extend({
+               options: {
+                   iconUrl: "http://bloximages.newyork1.vip.townnews.com/yakimaherald.com/content/tncms/assets/v3/editorial/d/53/d5313a00-f090-11e6-b32a-db7c658c172b/589f66d06493d.image.png",
+                   iconSize: [24, 24]
+               }
+           });
+            var dataLayer = L.geoJson(data, {
+              pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, {icon: new blackIcon()});
+              },
+              onEachFeature: function(feature, layer) {
+                  layer.bindPopup('<a href="' + feature.properties.id + '/">' +
+                          feature.properties.name +
+                      '</a>');
+              }
+          });
+          map.addLayer(dataLayer);
+          map.fitBounds(dataLayer.getBounds());
+
+          $("a").hover(function(){
+            var id = $(this)[0].id;
+            dataLayer.eachLayer(function(feature){
+                if(feature.feature.properties.id==id){
+                    feature.openPopup();
+                }
+
+    });
+});
+</script>

@@ -1,0 +1,130 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0;
+  padding: 1rem;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -moz-font-feature-settings: "liga" on;
+}
+
+img {
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+#map {
+  width: 100%;
+  height: 300px;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: flex-start;
+  color: #999999;
+}
+.cards__item {
+  display: flex;
+  padding: 1rem;
+  margin: 0;
+}
+@media (min-width: 40rem) {
+.cards__item {
+  width: 30%;
+}
+}
+@media (min-width: 56rem) {
+.cards__item {
+  width: 20%;
+}
+.form-control {
+  margin-top: 10px;
+  padding-right: 10px;
+  height: 42px;
+  width: 20% !important;
+}
+.card__image {
+  max-height: 250px;
+}
+}
+
+@media (max-width: 1000px) {
+.cards__item {
+  width: 30%;
+}
+}
+
+@media (max-width: 600px) {
+.cards__item {
+  width: 100%;
+}
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  justify-content: flex-start;
+}
+
+.card__content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.card__title {
+  color: #696969;
+  font-size: 1.25rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.card__text {
+  flex: 1 1 auto;
+  font-size: 1.5rem;
+}
+
+.wrap {
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+nav {
+  background-color: #333132;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 25px;
+}
+
+.intro {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.form-control {
+  margin-top: 10px;
+  padding-right: 10px;
+  height: 42px;
+}
+
+.btn {
+  margin-top: 10px;
+}

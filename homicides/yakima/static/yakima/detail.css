@@ -1,0 +1,23 @@
+.top-img {
+  margin-right: 15px;
+  float: left;
+  width: 100%;
+}
+
+.wrapper {
+  max-width: 1000px;
+  margin: 30px auto;
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  img {
+    width: 100%;
+  }
+}
+
+@media (min-width: 600px) {
+  .top-img{
+    width: 250px;
+  }
+}
